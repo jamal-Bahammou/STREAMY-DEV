@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import GoogleAuth from './GoogleAuth';
+
 const Header = () => {
 	return (
 		<div className='ui inverted menu'>
@@ -17,15 +19,8 @@ const Header = () => {
 				<Link to='/streams/new' className='item'>
 					CREATE STREAM
 				</Link>
-				<div className='item'>
-					<div className='ui primary button'>SIGN UP</div>
-				</div>
-				<div className='item'>
-					<div className='ui button'>LOG-IN</div>
-				</div>
-				<div className='item'>
-					<div className='ui red button'>LOG-OUT</div>
-				</div>
+				{/* CALL THE GOOGLE AUTH FILE */}
+				<GoogleAuth />
 			</div>
 		</div>
 	);
