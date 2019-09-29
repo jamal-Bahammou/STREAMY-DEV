@@ -1,7 +1,102 @@
-import React from 'react';
+import React, { Component } from 'react';
+import {
+	Grid,
+	Segment,
+	Header,
+	Card,
+	Image,
+	Tab,
+	Button
+} from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { fetchStreams } from '../../actions';
 
-const StreamList = () => {
-	return <div>StreamList page</div>;
+const panes = [
+	{ menuItem: 'ALL STREAMS', pane: { key: 'allStreams' } },
+	{ menuItem: 'PAST STREAMS', pane: { key: 'pastStreams' } },
+	{ menuItem: 'FUTURE STREAMS', pane: { key: 'futureStreams' } },
+	{ menuItem: 'HOSTING', pane: { key: 'hosted' } }
+];
+
+// style={{ background: 'rgb(100, 65, 164)' }}
+
+class StreamList extends Component {
+	componentDidMount() {
+		this.props.fetchStreams();
+	}
+	render() {
+		const { streams, isSignedIn } = this.props;
+		return (
+			<Grid.Column width={12}>
+				<Segment attached>
+					{isSignedIn && (
+						<Button
+							as={Link}
+							to={'/streams/new'}
+							color='purple'
+							floated='right'
+							content='CREATE STREAM'
+							style={{ marginTop: '10px' }}
+						/>
+					)}
+					<Header
+						icon='video'
+						content='STREAMS'
+						style={{ marginTop: '10px' }}
+					/>
+					<Tab panes={panes} menu={{ secondary: true, pointing: true }} />
+					<br />
+
+					<Card.Group itemsPerRow={4}>
+						{streams.map(stream => (
+							<Card key={stream.id}>
+								<Image src={'/live_stream.png'} />
+								<Card.Content>
+									<Card.Header textAlign='center'>
+										{stream.title}
+									</Card.Header>
+									<Card.Meta textAlign='center'>
+										{stream.description}
+									</Card.Meta>
+								</Card.Content>
+
+								{stream.userId === this.props.currentUserId && (
+									<div className='ui two buttons'>
+										<Button
+											as={Link}
+											to={`/streams/edit/${stream.id}`}
+											basic
+											icon='edit'
+											color='green'
+										/>
+										<Button
+											as={Link}
+											to='/streams/delete'
+											basic
+											icon='trash'
+											color='red'
+										/>
+									</div>
+								)}
+							</Card>
+						))}
+					</Card.Group>
+				</Segment>
+			</Grid.Column>
+		);
+	}
+}
+
+const mapStateToProps = state => {
+	return {
+		streams: Object.values(state.streams),
+		currentUserId: state.auth.userId,
+		isSignedIn: state.auth.isSignedIn
+	};
 };
 
-export default StreamList;
+export default connect(
+	mapStateToProps,
+	{ fetchStreams }
+)(StreamList);
