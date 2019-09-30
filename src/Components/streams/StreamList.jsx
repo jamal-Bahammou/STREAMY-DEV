@@ -72,7 +72,7 @@ class StreamList extends Component {
 										/>
 										<Button
 											as={Link}
-											to='/streams/delete'
+											to={`/streams/delete/${stream.id}`}
 											basic
 											icon='trash'
 											color='red'

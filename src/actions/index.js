@@ -73,4 +73,6 @@ export const deleteStream = id => async dispatch => {
 		type: DELETE_STREAM,
 		payload: id
 	});
+	// REDIRECT TO ROOT DIRECTORY
+	history.push('/');
 };
