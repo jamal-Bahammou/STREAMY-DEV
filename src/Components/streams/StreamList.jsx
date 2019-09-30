@@ -19,8 +19,6 @@ const panes = [
 	{ menuItem: 'HOSTING', pane: { key: 'hosted' } }
 ];
 
-// style={{ background: 'rgb(100, 65, 164)' }}
-
 class StreamList extends Component {
 	componentDidMount() {
 		this.props.fetchStreams();
@@ -66,7 +64,7 @@ class StreamList extends Component {
 								</Card.Content>
 								{stream.userId === this.props.currentUserId && (
 									<div className='ui two buttons'>
-										{/* <Button
+										<Button
 											as={Link}
 											to={`/streams/edit/${stream.id}`}
 											basic
@@ -79,7 +77,7 @@ class StreamList extends Component {
 											basic
 											icon='trash'
 											color='red'
-										/> */}
+										/>
 									</div>
 								)}
 							</Card>

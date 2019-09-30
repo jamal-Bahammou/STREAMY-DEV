@@ -8,7 +8,6 @@ class StreamShow extends Component {
 		this.props.fetchStream(this.props.match.params.id);
 	}
 	render() {
-		console.log(this.props.stream);
 		const { stream } = this.props;
 		return (
 			<>
