@@ -16,9 +16,6 @@ const Header = () => {
 				<Link to='/' className='item'>
 					STREAMS
 				</Link>
-				<Link to='/streams/new' className='item'>
-					CREATE STREAM
-				</Link>
 				{/* CALL THE GOOGLE AUTH FILE */}
 				<GoogleAuth />
 			</div>
