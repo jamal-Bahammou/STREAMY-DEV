@@ -50,7 +50,11 @@ class StreamList extends Component {
 
 					<Card.Group itemsPerRow={4}>
 						{streams.map(stream => (
-							<Card key={stream.id}>
+							<Card
+								key={stream.id}
+								as={Link}
+								to={`/streams/${stream.id}`}
+							>
 								<Image src={'/live_stream.png'} />
 								<Card.Content>
 									<Card.Header textAlign='center'>
@@ -60,10 +64,9 @@ class StreamList extends Component {
 										{stream.description}
 									</Card.Meta>
 								</Card.Content>
-
 								{stream.userId === this.props.currentUserId && (
 									<div className='ui two buttons'>
-										<Button
+										{/* <Button
 											as={Link}
 											to={`/streams/edit/${stream.id}`}
 											basic
@@ -76,7 +79,7 @@ class StreamList extends Component {
 											basic
 											icon='trash'
 											color='red'
-										/>
+										/> */}
 									</div>
 								)}
 							</Card>
