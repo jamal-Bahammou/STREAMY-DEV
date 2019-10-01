@@ -54,6 +54,7 @@ class StreamShow extends Component {
 							<video
 								ref={this.videoRef}
 								style={{ width: '100%' }}
+								poster='/live_stream.png'
 								controls
 							/>
 						</Card.Content>

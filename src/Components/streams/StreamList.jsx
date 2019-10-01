@@ -11,6 +11,8 @@ import {
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchStreams } from '../../actions';
+// import LoadingComponent from '../LoadComponent';
+import Fotter from '../Fotter';
 
 const panes = [
 	{ menuItem: 'ALL STREAMS', pane: { key: 'allStreams' } },
@@ -23,11 +25,13 @@ class StreamList extends Component {
 	componentDidMount() {
 		this.props.fetchStreams();
 	}
+
 	render() {
 		const { streams, isSignedIn } = this.props;
+		// if (!isSignedIn) return <LoadingComponent />;
 		return (
 			<Grid.Column width={12}>
-				<Segment attached>
+				<Segment attached loading={!streams[0]}>
 					{isSignedIn && (
 						<Button
 							as={Link}
@@ -82,6 +86,7 @@ class StreamList extends Component {
 						))}
 					</Card.Group>
 				</Segment>
+				<Fotter />
 			</Grid.Column>
 		);
 	}

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { createStream } from '../../actions';
 import StreamForm from './StreamForm';
+import LoadingComponent from '../LoadComponent';
 
 class StreamCreate extends Component {
 	onSubmit = formValues => {
@@ -12,6 +13,9 @@ class StreamCreate extends Component {
 	};
 
 	render() {
+		// FOR THE LOADING
+		if (!this.props.isSignedIn) return <LoadingComponent />;
+
 		return (
 			<Card centered fluid style={{ maxWidth: '700px' }}>
 				<Card.Content header='CREATE A STREAM' textAlign='center' />
@@ -30,7 +34,13 @@ class StreamCreate extends Component {
 	}
 }
 
+const mapStateToProps = state => {
+	return {
+		isSignedIn: state.auth.isSignedIn
+	};
+};
+
 export default connect(
-	null,
+	mapStateToProps,
 	{ createStream }
 )(StreamCreate);

@@ -6,6 +6,7 @@ import _ from 'lodash';
 
 import { fetchStream, editStream } from '../../actions';
 import StreamForm from './StreamForm';
+import LoadingComponent from '../LoadComponent';
 
 class StreamEdit extends Component {
 	componentDidMount() {
@@ -17,22 +18,17 @@ class StreamEdit extends Component {
 	};
 
 	render() {
-		const { stream } = this.props;
+		const { stream, isSignedIn } = this.props;
 
-		if (!stream) {
-			return <div>Loading !!!</div>;
-		}
+		// FOR THE LOADING
+		if (!isSignedIn) return <LoadingComponent />;
 
 		return (
 			<Card centered fluid style={{ maxWidth: '700px' }}>
 				<Card.Content header='CREATE A STREAM' textAlign='center' />
 				<Card.Content>
 					<StreamForm
-						initialValues={_.pick(
-							this.props.stream,
-							'title',
-							'description'
-						)}
+						initialValues={_.pick(stream, 'title', 'description')}
 						onSubmit={this.onSubmit}
 					/>
 					<Button
@@ -49,7 +45,10 @@ class StreamEdit extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-	return { stream: state.streams[ownProps.match.params.id] };
+	return {
+		stream: state.streams[ownProps.match.params.id],
+		isSignedIn: state.auth.isSignedIn
+	};
 };
 
 export default connect(

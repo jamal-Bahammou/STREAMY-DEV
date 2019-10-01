@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, Container, Button } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 
 import GoogleAuth from './GoogleAuth';
 
@@ -16,14 +17,16 @@ const Header = props => {
 				<Menu.Item as={Link} to='/streams' name='STREAMS' />
 				<Menu.Item as={Link} to='/' name='ABOUT' />
 				<Menu.Item position='right'>
-					<Button
-						as={Link}
-						to='/'
-						floated='right'
-						positive
-						inverted
-						content='CREATE CHANNEL'
-					/>
+					{props.isSignedIn && (
+						<Button
+							as={Link}
+							to='/'
+							floated='right'
+							positive
+							inverted
+							content='CREATE CHANNEL'
+						/>
+					)}
 				</Menu.Item>
 				<Menu.Item>
 					<GoogleAuth />
@@ -33,4 +36,8 @@ const Header = props => {
 	);
 };
 
-export default Header;
+const mapStateToProps = state => {
+	return { isSignedIn: state.auth.isSignedIn };
+};
+
+export default connect(mapStateToProps)(Header);
