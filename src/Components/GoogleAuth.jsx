@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Icon } from 'semantic-ui-react';
 
 import { signIn, signOut } from '../actions';
 
@@ -32,6 +33,7 @@ class GoogleAuth extends Component {
 		} else if (this.props.isSignedIn) {
 			return (
 				<button onClick={this.auth.signOut} className='ui red button'>
+					<Icon name='sign-out' />
 					SIGN OUT
 				</button>
 			);
@@ -49,7 +51,7 @@ class GoogleAuth extends Component {
 	}
 
 	render() {
-		return <div className='item'> {this.renderAuthButton()} </div>;
+		return <> {this.renderAuthButton()} </>;
 	}
 }
 

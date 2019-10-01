@@ -2,7 +2,7 @@ import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import history from '../history';
 
-// HEADER
+import HomePage from './HomePage';
 import Header from './Header';
 import StreamList from './streams/StreamList';
 import StreamCreate from './streams/StreamCreate';
@@ -12,23 +12,36 @@ import StreamShow from './streams/StreamShow';
 
 const App = () => {
 	return (
-		<div
-			style={{
-				marginTop: '10px',
-				backgroundImage: "url('/background.jpg')"
-			}}
-		>
+		<div>
 			<Router history={history}>
-				<div className='ui container'>
-					<Header />
-					<Switch>
-						<Route path='/' exact component={StreamList} />
-						<Route path='/streams/new' component={StreamCreate} />
-						<Route path='/streams/edit/:id' component={StreamEdit} />
-						<Route path='/streams/delete/:id' component={StreamDelete} />
-						<Route path='/streams/:id' component={StreamShow} />
-					</Switch>
-				</div>
+				<Switch>
+					<Route exact path='/' component={HomePage} />
+				</Switch>
+
+				<Route
+					path='/(.+)'
+					render={() => (
+						<div
+							className='ui container'
+							style={{ margin: '68px 0 20px 0' }}
+						>
+							<Header />
+							<Switch>
+								<Route path='/streams' exact component={StreamList} />
+								<Route path='/streams/new' component={StreamCreate} />
+								<Route
+									path='/streams/edit/:id'
+									component={StreamEdit}
+								/>
+								<Route
+									path='/streams/delete/:id'
+									component={StreamDelete}
+								/>
+								<Route path='/streams/:id' component={StreamShow} />
+							</Switch>
+						</div>
+					)}
+				/>
 			</Router>
 		</div>
 	);

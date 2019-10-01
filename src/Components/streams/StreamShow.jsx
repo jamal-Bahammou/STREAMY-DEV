@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Card, Icon, Button } from 'semantic-ui-react';
 import flv from 'flv.js';
 
 import { fetchStream } from '../../actions';
+import history from '../../history';
 
 class StreamShow extends Component {
 	constructor(props) {
@@ -46,15 +48,34 @@ class StreamShow extends Component {
 		return (
 			<>
 				{stream && (
-					<div>
-						<h2>{stream.title}</h2>
-						<video
-							ref={this.videoRef}
-							style={{ width: '100%' }}
-							controls
+					<Card centered fluid style={{ maxWidth: '850px' }}>
+						<Card.Content header={stream.title} textAlign='center' />
+						<Card.Content>
+							<video
+								ref={this.videoRef}
+								style={{ width: '100%' }}
+								controls
+							/>
+						</Card.Content>
+						<Card.Content extra textAlign='center'>
+							<Icon name='user' />
+							255 watching now | {` `}
+							<Icon name='time' floated='right' />
+							Started 5 minutes ago
+							<Button
+								onClick={() => history.push('/streams')}
+								color='purple'
+								size='mini'
+								floated='right'
+								icon='home'
+								content='BACK'
+							/>
+						</Card.Content>
+						<Card.Content
+							description={stream.description}
+							textAlign='center'
 						/>
-						<h5>{stream.description}</h5>
-					</div>
+					</Card>
 				)}
 			</>
 		);

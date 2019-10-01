@@ -32,14 +32,15 @@ class StreamList extends Component {
 						<Button
 							as={Link}
 							to={'/streams/new'}
+							content='CREATE STREAM'
+							icon='plus circle'
 							color='purple'
 							floated='right'
-							content='CREATE STREAM'
 							style={{ marginTop: '10px' }}
 						/>
 					)}
 					<Header
-						icon='video'
+						icon='twitch'
 						content='STREAMS'
 						style={{ marginTop: '10px' }}
 					/>
@@ -58,9 +59,6 @@ class StreamList extends Component {
 									<Card.Header textAlign='center'>
 										{stream.title}
 									</Card.Header>
-									<Card.Meta textAlign='center'>
-										{stream.description}
-									</Card.Meta>
 								</Card.Content>
 								{stream.userId === this.props.currentUserId && (
 									<div className='ui two buttons'>

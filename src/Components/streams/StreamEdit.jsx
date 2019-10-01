@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Card, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import _ from 'lodash';
 
 import { fetchStream, editStream } from '../../actions';
@@ -22,13 +24,26 @@ class StreamEdit extends Component {
 		}
 
 		return (
-			<>
-				<h3>EDIT STREAM</h3>
-				<StreamForm
-					initialValues={_.pick(this.props.stream, 'title', 'description')}
-					onSubmit={this.onSubmit}
-				/>
-			</>
+			<Card centered fluid style={{ maxWidth: '700px' }}>
+				<Card.Content header='CREATE A STREAM' textAlign='center' />
+				<Card.Content>
+					<StreamForm
+						initialValues={_.pick(
+							this.props.stream,
+							'title',
+							'description'
+						)}
+						onSubmit={this.onSubmit}
+					/>
+					<Button
+						as={Link}
+						to='/streams'
+						floated='right'
+						content='CANCEL'
+						icon='cancel'
+					/>
+				</Card.Content>
+			</Card>
 		);
 	}
 }
