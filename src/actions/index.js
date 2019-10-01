@@ -34,7 +34,7 @@ export const createStream = formValues => async (dispatch, getState) => {
 		payload: response.data
 	});
 	// REDIRECT TO ROOT DIRECTORY
-	history.push('/');
+	history.push('/streams');
 };
 
 // GET ALL THE STREAMS FROM DATABASE
@@ -63,7 +63,7 @@ export const editStream = (id, formValues) => async dispatch => {
 		payload: response.data
 	});
 	// REDIRECT TO ROOT DIRECTORY
-	history.push('/');
+	history.push('/streams');
 };
 
 // DELETE A STREAM FROM DATABASE
@@ -74,5 +74,5 @@ export const deleteStream = id => async dispatch => {
 		payload: id
 	});
 	// REDIRECT TO ROOT DIRECTORY
-	history.push('/');
+	history.push('/streams');
 };
