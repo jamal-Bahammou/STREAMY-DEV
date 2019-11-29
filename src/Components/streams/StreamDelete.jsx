@@ -1,31 +1,37 @@
 import React, { Component } from 'react';
-import Modals from '../Modals';
+import Modals from './Modals';
 import { Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import history from '../../history';
-import { connect } from 'react-redux';
 
-import { fetchStream, deleteStream } from '../../actions';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase';
 
 class StreamDelete extends Component {
-	componentDidMount() {
-		this.props.fetchStream(this.props.match.params.id);
-	}
+	// ON DELETE FUNCTION
+	onSubmit = e => {
+		e.preventDefault();
+		const editedStream = this.state;
+
+		const { firestore, history } = this.props;
+
+		firestore
+			.delete(
+				{ collection: 'streams', doc: this.props.match.params.id },
+				editedStream
+			)
+			.then(() => history.push('/streams'));
+	};
 
 	// THE BUTTON OF DELETE POPUP
 	renderActions() {
-		const { deleteStream, match } = this.props;
 		return (
 			<Button.Group widths={4}>
-				<Button
-					onClick={() => deleteStream(match.params.id)}
-					fluid
-					color='red'
-				>
+				<Button onClick={this.onSubmit} fluid color='red'>
 					Delete
 				</Button>
 				<Button.Or />
-				<Button as={Link} to='/streams' fluid positive>
+				<Button as={Link} to='/streams' fluid>
 					Cancel
 				</Button>
 			</Button.Group>
@@ -39,25 +45,28 @@ class StreamDelete extends Component {
 
 		return `Are you sure you want to delete the stream with title:  ${this.props.stream.title}`;
 	}
+
 	render() {
 		return (
 			<Modals
 				title='DELETE STREAM'
 				content={this.renderContent()}
 				action={this.renderActions()}
-				onDismiss={() => history.push('/streams')}
+				onDismiss={() => this.props.history.push('/streams')}
 			/>
 		);
 	}
 }
 
-const mapStateToProps = (state, ownProps) => {
-	return {
-		stream: state.streams[ownProps.match.params.id]
-	};
-};
-
-export default connect(
-	mapStateToProps,
-	{ fetchStream, deleteStream }
+export default compose(
+	firestoreConnect(props => [
+		{
+			collection: 'streams',
+			storeAs: 'stream',
+			doc: props.match.params.id
+		}
+	]),
+	connect(({ firestore: { ordered } }, props) => ({
+		stream: ordered.stream && ordered.stream[0]
+	}))
 )(StreamDelete);

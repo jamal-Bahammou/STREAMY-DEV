@@ -9,6 +9,10 @@ import StreamCreate from './streams/StreamCreate';
 import StreamEdit from './streams/StreamEdit';
 import StreamDelete from './streams/StreamDelete';
 import StreamShow from './streams/StreamShow';
+import loginForm from './loginForm';
+import registerForm from './registerForm';
+
+import { UserIsAuthenticated, UserIsNotAuthenticated } from './helpers/auth';
 
 const App = () => {
 	return (
@@ -27,17 +31,35 @@ const App = () => {
 						>
 							<Header />
 							<Switch>
-								<Route path='/streams' exact component={StreamList} />
-								<Route path='/streams/new' component={StreamCreate} />
+								<Route
+									path='/streams'
+									exact
+									component={UserIsAuthenticated(StreamList)}
+								/>
+								<Route
+									path='/streams/login'
+									component={UserIsNotAuthenticated(loginForm)}
+								/>
+								<Route
+									path='/streams/register'
+									component={UserIsNotAuthenticated(registerForm)}
+								/>
+								<Route
+									path='/streams/new'
+									component={UserIsAuthenticated(StreamCreate)}
+								/>
 								<Route
 									path='/streams/edit/:id'
-									component={StreamEdit}
+									component={UserIsAuthenticated(StreamEdit)}
 								/>
 								<Route
 									path='/streams/delete/:id'
-									component={StreamDelete}
+									component={UserIsAuthenticated(StreamDelete)}
 								/>
-								<Route path='/streams/:id' component={StreamShow} />
+								<Route
+									path='/streams/:id'
+									component={UserIsAuthenticated(StreamShow)}
+								/>
 							</Switch>
 						</div>
 					)}

@@ -1,35 +1,83 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Card, Button } from 'semantic-ui-react';
+import { Card, Form, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import _ from 'lodash';
+import history from '../../history';
 
-import { fetchStream, editStream } from '../../actions';
-import StreamForm from './StreamForm';
 import LoadingComponent from '../LoadComponent';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase';
 
 class StreamEdit extends Component {
-	componentDidMount() {
-		this.props.fetchStream(this.props.match.params.id);
-	}
-
-	onSubmit = formValues => {
-		this.props.editStream(this.props.match.params.id, formValues);
+	state = {
+		title: '',
+		description: ''
 	};
 
+	onSubmit = e => {
+		e.preventDefault();
+		const editedStream = this.state;
+
+		const { firestore } = this.props;
+
+		firestore
+			.update(
+				{ collection: 'streams', doc: this.props.match.params.id },
+				editedStream
+			)
+			.then(() => history.push('/streams'));
+	};
+
+	onChange = (e, data) => this.setState({ [data.name]: data.value });
+
 	render() {
-		const { stream, isSignedIn } = this.props;
+		const { stream } = this.props;
 
 		// FOR THE LOADING
-		if (!isSignedIn) return <LoadingComponent />;
+		if (!stream) return <LoadingComponent />;
 
 		return (
 			<Card centered fluid style={{ maxWidth: '700px' }}>
-				<Card.Content header='CREATE A STREAM' textAlign='center' />
+				<Card.Content header='EDIT STREAM' textAlign='center' />
 				<Card.Content>
-					<StreamForm
-						initialValues={_.pick(stream, 'title', 'description')}
-						onSubmit={this.onSubmit}
+					<Card centered fluid>
+						<Card.Content>
+							<Form loading={!stream}>
+								<Form.Input
+									// error={{ content: 'Please enter your title', pointing: 'below' }}
+									name='title'
+									fluid
+									label='ENTER TITLE'
+									placeholder='Enter title'
+									onChange={this.onChange}
+									defaultValue={stream.title}
+								/>
+								<Form.Input
+									// error='Please enter your description'
+									name='description'
+									fluid
+									label='ENTER DESCRIPTION'
+									placeholder='Enter description'
+									onChange={this.onChange}
+									defaultValue={stream.description}
+								/>
+								<Form.Checkbox
+									label='I agree to the terms and conditions'
+									// error={{
+									// 	content: 'You must agree to the terms and conditions',
+									// 	pointing: 'left',
+									// }}
+								/>
+							</Form>
+						</Card.Content>
+					</Card>
+					<Button
+						onClick={this.onSubmit}
+						as={Link}
+						to='/streams'
+						content='SUBMIT'
+						color='blue'
+						icon='save'
 					/>
 					<Button
 						as={Link}
@@ -44,14 +92,15 @@ class StreamEdit extends Component {
 	}
 }
 
-const mapStateToProps = (state, ownProps) => {
-	return {
-		stream: state.streams[ownProps.match.params.id],
-		isSignedIn: state.auth.isSignedIn
-	};
-};
-
-export default connect(
-	mapStateToProps,
-	{ fetchStream, editStream }
+export default compose(
+	firestoreConnect(props => [
+		{
+			collection: 'streams',
+			storeAs: 'stream',
+			doc: props.match.params.id
+		}
+	]),
+	connect(({ firestore: { ordered } }, props) => ({
+		stream: ordered.stream && ordered.stream[0]
+	}))
 )(StreamEdit);
